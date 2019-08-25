@@ -42,10 +42,9 @@ abstract class EloquentRepository implements interfaceRepository
      */
     public function getAll($columns = [], $offset = 0, $limit = 10)
     {
-        $sql = $this->_model;
-        $this->pagination['total_page'] = (int)ceil($sql->count()/$limit);
+        $this->pagination['total_page'] = (int)ceil($this->count()/$limit);
         $this->pagination['curent_page'] = (int)round($offset/$limit) + 1;
-        $this->pagination['data'] = $this->_model->offset($offset)->limit($limit)->get();
+        $this->pagination['data'] = $this->pagination($offset, $limit);
 
         return $this->pagination;
     }
@@ -87,6 +86,11 @@ abstract class EloquentRepository implements interfaceRepository
         }
 
         return false;
+    }
+
+    public function pagination($offset = 0, $limit = 10)
+    {
+        return $this->_model->offset($offset)->limit($limit)->get();
     }
 
     /**
