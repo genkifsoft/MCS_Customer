@@ -1,0 +1,120 @@
+<?php
+
+namespace MicroService\Src\Repository;
+
+use MicroService\Src\Interfaces\interfaceRepository;
+
+abstract class EloquentRepository implements interfaceRepository
+{
+    /**
+     * @var \Illuminate\Database\Eloquent\Model
+     */
+    protected $_model;
+    protected $pagination;
+
+    /**
+     * EloquentRepository constructor.
+     */
+    public function __construct()
+    {
+        $this->setModel();
+    }
+
+    /**
+     * get model
+     * @return string
+     */
+    abstract public function getModel();
+
+    /**
+     * Set model
+     */
+    public function setModel()
+    {
+        $this->_model = app()->make(
+            $this->getModel()
+        );
+    }
+
+    /**
+     * Get All
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getAll($columns = [], $offset = 0, $limit = 10)
+    {
+        $sql = $this->_model;
+        $this->pagination['total_page'] = (int)ceil($sql->count()/$limit);
+        $this->pagination['curent_page'] = (int)round($offset/$limit) + 1;
+        $this->pagination['data'] = $this->_model->offset($offset)->limit($limit)->get();
+
+        return $this->pagination;
+    }
+
+    /**
+     * Get one
+     * @param $id
+     * @return mixed
+     */
+    public function find($id, $colums = [])
+    {
+        $result = $this->_model->find($id, $colums);
+
+        return $result;
+    }
+
+    /**
+     * Create
+     * @param array $attributes
+     * @return mixed
+     */
+    public function create(array $attributes)
+    {
+        return $this->_model->create($attributes);
+    }
+
+    /**
+     * Update
+     * @param $id
+     * @param array $attributes
+     * @return bool|mixed
+     */
+    public function update($id, array $attributes, $columns = [])
+    {
+        $result = $this->_model->find($id, $columns);
+        if ($result) {
+            $result->update($attributes);
+            return $result;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete
+     *
+     * @param $id
+     * @return bool
+     */
+    public function delete($id)
+    {
+        $result = $this->_model->find($id);
+        if ($result) {
+            $result->delete();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Count model
+     *
+     * @param $id
+     * @return bool
+     */
+    public function count()
+    {
+        return $this->_model->count();
+    }
+}
