@@ -50,7 +50,7 @@ class CustomerRepository extends CustomerEloquentRepository
         if (!$token = JWTAuth::attempt($option))
         {
             unset($this->data['status']);
-            $this->data['error'] = "register_validation_error";
+            $this->data['error'] = "login_error";
 
             $this->data['error_code'] = JsonResponse::HTTP_NOT_FOUND;
             $this->data['message'] =  'Nguời dùng không tìm thấy';

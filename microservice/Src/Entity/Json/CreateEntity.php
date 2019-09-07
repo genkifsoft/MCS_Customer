@@ -29,7 +29,10 @@ class CreateEntity extends BasicEntity
             $this->setStatus(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             $this->setBody($dataJson['message']);
             if (isset($dataJson['error']))
+            {
+                $this->status = 401;
                 $this->setError($dataJson['error']);
+            }
         } else {
             if (isset($dataJson['status']))
                 $this->setSuccess($dataJson['status']);
