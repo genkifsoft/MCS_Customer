@@ -8,6 +8,7 @@ use MicroService\Src\Entity\Json\CreateEntity;
 use MicroService\Src\Entity\Json\DeleteEntity;
 use MicroService\Src\Entity\Json\UpdateEntity;
 use MicroService\Src\Repository\Customer\CustomerRepository;
+use App\Http\Requests\Customer\LoginRequest;
 
 class CustomerController
 {
@@ -44,11 +45,12 @@ class CustomerController
      * Only allow login is email
      * Not use phone login
      */
-    public function loginCustomer(Request $request)
+    public function loginCustomer(LoginRequest $request)
     {
         $data = $this->customerRepository->loginRepository($this->params_request);
-        $get_json = new GetEntity($data);
-        $result   = $get_json->toJson();
+        $create_json = new CreateEntity;
+        $create_json->setParamByResponse($data);
+        $result   = $create_json->toJson();
 
         return $result;
     }
