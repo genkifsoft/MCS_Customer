@@ -4,7 +4,7 @@ namespace MicroService\Src\Repository;
 
 use MicroService\Src\Interfaces\interfaceRepository;
 
-abstract class EloquentRepository implements interfaceRepository
+abstract class AbstractEloquentRepository implements interfaceRepository
 {
     /**
      * @var \Illuminate\Database\Eloquent\Model
@@ -13,7 +13,7 @@ abstract class EloquentRepository implements interfaceRepository
     protected $pagination;
 
     /**
-     * EloquentRepository constructor.
+     * AbstractEloquentRepository constructor.
      */
     public function __construct()
     {

@@ -3,9 +3,9 @@
 namespace MicroService\Src\Repository\Customer;
 
 use App\Models\Customer;
-use MicroService\Src\Repository\EloquentRepository;
+use MicroService\Src\Repository\AbstractEloquentRepository;
 
-class CustomerEloquentRepository extends EloquentRepository
+class CustomerEloquentRepository extends AbstractEloquentRepository
 {
      /**
      * get model
