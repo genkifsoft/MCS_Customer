@@ -44,14 +44,18 @@ class CustomerRepository extends CustomerEloquentRepository
     }
 
     public function loginRepository($params_request)
-    {        
+    {   
+        $this->data['status'] = "success";     
         $option = array_only($params_request, ['email', 'password']);
         if (!$token = JWTAuth::attempt($option))
         {
+            unset($this->data['status']);
+            $this->data['error'] = "register_validation_error";
+
             $this->data['error_code'] = JsonResponse::HTTP_NOT_FOUND;
             $this->data['message'] =  'Nguời dùng không tìm thấy';
         } else {
-            $this->data['data'] = 'Bearer '. $token;
+            $this->data['body'] = 'Bearer '. $token;
         }
 
         return $this;

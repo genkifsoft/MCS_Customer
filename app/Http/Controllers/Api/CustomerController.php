@@ -46,7 +46,7 @@ class CustomerController
      * Only allow login is email
      * Not use phone login
      */
-    public function loginCustomer(LoginRequest $request)
+    public function loginCustomer(LoginCustomerRequest $request)
     {
         $data = $this->customerRepository->loginRepository($this->params_request);
         $create_json = new CreateEntity;
