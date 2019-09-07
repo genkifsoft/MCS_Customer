@@ -4,7 +4,7 @@ namespace App\Http\Requests\Customer;
 
 use App\Http\Requests\AbstractApiRequest;
 
-class LoginRequest extends AbstractApiRequest
+class LoginCustomerRequest extends AbstractApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.

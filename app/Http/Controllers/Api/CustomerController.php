@@ -8,7 +8,8 @@ use MicroService\Src\Entity\Json\CreateEntity;
 use MicroService\Src\Entity\Json\DeleteEntity;
 use MicroService\Src\Entity\Json\UpdateEntity;
 use MicroService\Src\Repository\Customer\CustomerRepository;
-use App\Http\Requests\Customer\LoginRequest;
+use App\Http\Requests\Customer\LoginCustomerRequest;
+use App\Http\Requests\Customer\CreateCustomerRequest;
 
 class CustomerController
 {
@@ -22,7 +23,7 @@ class CustomerController
         unset($this->params_request['params_request']);
     }
 
-    public function createCustomer(Request $request)
+    public function createCustomer(CreateCustomerRequest $request)
     {
         $data = $this->customerRepository->createRepository($this->params_request);
         $create_json = new CreateEntity;

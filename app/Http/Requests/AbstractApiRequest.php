@@ -10,7 +10,6 @@ abstract class AbstractApiRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
-        $this->body = $validator->errors();
-        throw new HttpResponseException(response()->json($this->result(), 422));
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }
