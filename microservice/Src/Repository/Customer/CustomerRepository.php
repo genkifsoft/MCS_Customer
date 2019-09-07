@@ -13,6 +13,7 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function createRepository($params_request)
     {
+        $this->data['status'] = "success";
         $data = [
             'id'            => customerId($this->count()),
             'email'         => $params_request['email'],
@@ -22,6 +23,8 @@ class CustomerRepository extends CustomerEloquentRepository
         try {
             $this->data['body'] = $this->create($data);
         } catch(\Exception $e) {
+            unset($this->data['status']);
+            $this->data['error'] = "register_validation_error";
             $this->data['error_code'] = $e->errorInfo[1];
             $this->data['message'] =  $e->getMessage();
         }

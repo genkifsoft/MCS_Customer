@@ -47,6 +47,16 @@ class BasicEntity implements interfaceResponse
         $this->body['body'] = $body;
     }
 
+    public function setError($message)
+    {
+        $this->body['error'] = $message;
+    }
+
+    public function setSuccess($message)
+    {
+        $this->body['status'] = $message;
+    }
+
     /**
      * responseJson. be call from controller
      * @return json
