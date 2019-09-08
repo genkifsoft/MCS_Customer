@@ -45,8 +45,10 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function loginRepository($params_request)
     {   
+        $params_request['password'] = urldecode($params_request['password']);
         $this->data['status'] = "success";     
         $option = array_only($params_request, ['email', 'password']);
+        
         if (!$token = JWTAuth::attempt($option))
         {
             unset($this->data['status']);
