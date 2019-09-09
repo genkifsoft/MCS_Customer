@@ -10,16 +10,29 @@ class GetEntity extends BasicEntity
     {
         parent::__construct();
 
+        $std = new \stdClass;
         $this->setVerifyCode(0);
         $this->setMessage('Get Success');
         $this->setStatus(JsonResponse::HTTP_OK);
 
         if(!empty((array) $data)){
-            $this->setBody($data->data);
+            $this->setBody($data);
+            if (isset($data->data['status']))
+            {
+                $std->data = $data->data['body'];
+                $this->setBody($std);
+                $this->setSuccess($data->data['status']);
+            }
         } else {
             $this->setVerifyCode(1);
             $this->setMessage('Get Failed');
             $this->setStatus(JsonResponse::HTTP_NO_CONTENT);
+            
+            if (isset($data['error']))
+            {
+                $this->status = 401;
+                $this->setError($data->$data['error']);
+            }
         }
     }
 

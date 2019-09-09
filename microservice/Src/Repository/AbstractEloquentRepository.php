@@ -44,7 +44,7 @@ abstract class AbstractEloquentRepository implements interfaceRepository
     {
         $this->pagination['total_page'] = (int)ceil($this->count()/$limit);
         $this->pagination['curent_page'] = (int)round($offset/$limit) + 1;
-        $this->pagination['data'] = $this->pagination($offset, $limit);
+        $this->pagination['list'] = $this->pagination($offset, $limit);
 
         return $this->pagination;
     }

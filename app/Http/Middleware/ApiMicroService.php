@@ -18,7 +18,6 @@ class ApiMicroService
     {
         $params_request = $request->get('params_request', false);
         $params_request = json_decode($params_request);
-        
         // count param neu > 0 thi hop le
         // else status 406 va code la 195
         if (!isset($params_request->czt) || (isset($params_request->czt) 

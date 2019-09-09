@@ -42,6 +42,15 @@ class CustomerController
         return $result;
     }
 
+    public function detailCustomer(Request $request)
+    {
+        $data = $this->customerRepository->detailCustomerRepository($this->params_request);
+        $get_json = new GetEntity($data);
+        $result   = $get_json->toJson();
+
+        return $result;
+    }
+    
      /**
      * Only allow login is email
      * Not use phone login

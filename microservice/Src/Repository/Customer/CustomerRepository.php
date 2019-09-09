@@ -43,6 +43,21 @@ class CustomerRepository extends CustomerEloquentRepository
         return $this;
     }
 
+    public function detailCustomerRepository($params_request)
+    {
+        $this->data['status'] = "success";
+        try {
+            $userId = JWTAuth::user()->id;
+            $columns = ['id', 'email', 'first_name', 'last_name'];
+            $this->data['body'] = $this->find($userId, $columns);
+        } catch(\Exception $e) {
+            unset($this->data['status']);
+            $this->data['error'] = "Unauthorized";
+        }
+
+        return $this;
+    }
+
     public function loginRepository($params_request)
     {   
         $params_request['password'] = urldecode($params_request['password']);

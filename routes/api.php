@@ -20,6 +20,7 @@ Route::namespace('Api')->group(function () {
         Route::post('login', 'CustomerController@loginCustomer');
        
         Route::group(['middleware' => 'jwt.auth'], function ($router) {
+            Route::post('detail', 'CustomerController@detailCustomer');
             Route::post('list', 'CustomerController@getAllCustomer');
             Route::post('logout', 'CustomerController@logoutCustomer');
             Route::post('delete', 'CustomerController@deleteCustomer');
