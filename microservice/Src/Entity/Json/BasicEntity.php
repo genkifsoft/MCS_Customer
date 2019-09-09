@@ -64,4 +64,8 @@ class BasicEntity implements interfaceResponse
     function toJson(){
         return response()->json($this->body, $this->status);
     }
+
+    function toJsonHeader($token){
+        return response()->json($this->body, $this->status)->header('Authorization', $token);
+    }
 }

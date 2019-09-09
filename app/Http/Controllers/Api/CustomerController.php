@@ -60,7 +60,9 @@ class CustomerController
         $data = $this->customerRepository->loginRepository($this->params_request);
         $create_json = new CreateEntity;
         $create_json->setParamByResponse($data);
-        $result   = $create_json->toJson();
+        $token = $data->data['body'];
+
+        $result = $create_json->toJsonHeader($token);
 
         return $result;
     }

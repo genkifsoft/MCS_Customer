@@ -72,7 +72,7 @@ class CustomerRepository extends CustomerEloquentRepository
             $this->data['error_code'] = JsonResponse::HTTP_NOT_FOUND;
             $this->data['message'] =  'Nguời dùng không tìm thấy';
         } else {
-            $this->data['body'] = 'Bearer '. $token;
+            $this->data['body']['token'] = $token;
         }
 
         return $this;
