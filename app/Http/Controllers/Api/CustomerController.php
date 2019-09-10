@@ -95,4 +95,16 @@ class CustomerController
 
         return $result;
     }
+
+    public function refreshCustomer(Request $request)
+    {
+        $data = $this->customerRepository->refreshRepository($this->params_request);
+        $create_json = new CreateEntity;
+        $create_json->setParamByResponse($data);
+        $token = $data->data['body'];
+
+        $result = $create_json->toJsonHeader($token);
+
+        return $result;
+    }
 }

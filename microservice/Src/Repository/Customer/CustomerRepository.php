@@ -131,4 +131,19 @@ class CustomerRepository extends CustomerEloquentRepository
 
         return $this;
     }
+
+    public function refreshRepository($params_request)
+    {
+        try{
+            $this->data['status'] = "success";
+            $this->data['body'] = JWTAuth::refresh(JWTAuth::getToken());
+        } catch(\JWTException $e) {
+            unset($this->data['status']);
+            $this->data['error'] = "refersh_token_error";
+            $this->data['error_code'] = 1;
+            $this->data['message'] =  $e->getMessage();
+        }
+
+        return $this;
+    }
 }

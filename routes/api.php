@@ -25,6 +25,7 @@ Route::namespace('Api')->group(function () {
             Route::post('logout', 'CustomerController@logoutCustomer');
             Route::post('delete', 'CustomerController@deleteCustomer');
             Route::post('update', 'CustomerController@updateCustomer');
+            Route::post('refresh', 'CustomerController@refreshCustomer');
         });
     });
 });
