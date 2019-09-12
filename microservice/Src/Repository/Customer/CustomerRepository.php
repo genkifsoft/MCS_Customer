@@ -48,7 +48,7 @@ class CustomerRepository extends CustomerEloquentRepository
         $this->data['status'] = "success";
         try {
             $userId = JWTAuth::user()->id;
-            $columns = ['id', 'email', 'first_name', 'last_name'];
+            $columns = ['id', 'email', 'first_name', 'last_name', 'phone', 'address'];
             $this->data['body'] = $this->find($userId, $columns);
         } catch(\Exception $e) {
             unset($this->data['status']);
@@ -102,15 +102,16 @@ class CustomerRepository extends CustomerEloquentRepository
             'phone'        => $request->get('phone'),
         ];
         $columns = ['id', 'last_name', 'first_name', 'address', 'email', 'phone'];
+        $this->data['error_code'] = 1;
         try {
             $checkPhoneExist = $this->checkPhoneBeforeUpdate(userId(), $request->get('phone'));
             if ($checkPhoneExist) {
-                $this->data['body'] = 'Số điện thoại đã tồn tại';
+                $this->data['message'] = 'Số điện thoại đã tồn tại';
             } else {
+                $this->data['error_code'] = 0;
                 $this->data['body'] = $this->update(userId(), $data, $columns);
             }
         } catch(\Exception $e) {
-            $this->data['error_code'] = 1;
             $this->data['message'] =  $e->getMessage();
         }
 

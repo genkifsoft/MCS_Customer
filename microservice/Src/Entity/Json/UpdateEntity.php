@@ -17,14 +17,15 @@ class UpdateEntity extends BasicEntity
     public function setParamByResponse($response)
     {
         $dataJson = (array)$response->data;
+        $std = new \StdClass;
         if(isset($dataJson['error_code']) && $dataJson['error_code'] !== 0)
         {
             $this->setVerifyCode($dataJson['error_code']);
             $this->setMessage('Update Failed');
             $this->setStatus(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            $this->setBody($dataJson['message']);
+            $std->data = $dataJson['message'];
+            $this->setBody($std);
         } else {
-            $std = new \StdClass;
             $std->data = $dataJson['body'];
 
             $this->setBody($std);
