@@ -54,9 +54,9 @@ abstract class AbstractEloquentRepository implements interfaceRepository
      * @param $id
      * @return mixed
      */
-    public function find($id, $colums = [])
+    public function find($id, $columns = '*')
     {
-        $result = $this->_model->find($id, $colums);
+        $result = $this->_model->find($id, $columns);
 
         return $result;
     }

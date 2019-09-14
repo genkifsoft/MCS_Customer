@@ -17,6 +17,8 @@ class CustomerRepository extends CustomerEloquentRepository
         $data = [
             'id'            => customerId($this->count()),
             'email'         => $params_request['email'],
+            'first_name'    => $params_request['first_name'],
+            'last_name'     => $params_request['last_name'],
             'password'      => Hash::make($params_request['password']),
             'status'        => self::USER_ACTIVED,
         ];
@@ -48,8 +50,7 @@ class CustomerRepository extends CustomerEloquentRepository
         $this->data['status'] = "success";
         try {
             $userId = JWTAuth::user()->id;
-            $columns = ['id', 'email', 'first_name', 'last_name', 'phone', 'address'];
-            $this->data['body'] = $this->find($userId, $columns);
+            $this->data['body'] = $this->find($userId);
         } catch(\Exception $e) {
             unset($this->data['status']);
             $this->data['error'] = "Unauthorized";
