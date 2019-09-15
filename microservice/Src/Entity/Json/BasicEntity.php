@@ -39,6 +39,7 @@ class BasicEntity implements interfaceResponse
 
     public function setStatus($status)
     {
+        $this->status = $status;
         $this->body['header']['status_code'] = $status;
     }
 

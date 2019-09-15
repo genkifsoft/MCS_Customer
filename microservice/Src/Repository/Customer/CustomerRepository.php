@@ -108,6 +108,7 @@ class CustomerRepository extends CustomerEloquentRepository
             $checkPhoneExist = $this->checkPhoneBeforeUpdate(userId(), $request->get('phone'));
             if ($checkPhoneExist) {
                 $this->data['message'] = 'Số điện thoại đã tồn tại';
+                $this->data['error_code'] = 2;
             } else {
                 $this->data['error_code'] = 0;
                 $this->data['body'] = $this->update(userId(), $data, $columns);
