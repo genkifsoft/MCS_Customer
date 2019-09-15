@@ -79,9 +79,9 @@ class CustomerController
     public function updateCustomer(Request $request)
     {
         $data = $this->customerRepository->updateRepository($request);
-        $create_json = new UpdateEntity;
-        $create_json->setParamByResponse($data);
-        $result = $create_json->toJson();
+        $update_json = new UpdateEntity;
+        $update_json->setParamByResponse($data);
+        $result = $update_json->toJson();
 
         return $result;
     }
@@ -89,9 +89,9 @@ class CustomerController
     public function deleteCustomer(Request $request)
     {
         $data = $this->customerRepository->deleteRepository($this->params_request);
-        $create_json = new DeleteEntity;
-        $create_json->setParamByResponse($data);
-        $result = $create_json->toJson();
+        $delete_json = new DeleteEntity;
+        $delete_json->setParamByResponse($data);
+        $result = $delete_json->toJson();
 
         return $result;
     }
@@ -104,6 +104,16 @@ class CustomerController
         $token = $data->data['body'];
 
         $result = $create_json->toJsonHeader($token);
+
+        return $result;
+    }
+
+    public function changePassword(Request $request)
+    {
+        $data = $this->customerRepository->changePassword($request);
+        $update_json = new UpdateEntity;
+        $update_json->setParamByResponse($data);
+        $result = $update_json->toJson();
 
         return $result;
     }

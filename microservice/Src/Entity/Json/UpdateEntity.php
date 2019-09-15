@@ -18,21 +18,24 @@ class UpdateEntity extends BasicEntity
     {
         $dataJson = (array)$response->data;
         $std = new \StdClass;
-        if(isset($dataJson['error_code']) && $dataJson['error_code'] !== 0)
+        if(isset($dataJson['error_code']))
         {
-            $this->setVerifyCode($dataJson['error_code']);
-            $this->setMessage('Update Failed');
-            $std->data = $dataJson['message'];
-            $this->setBody($std);
+            if ($dataJson['error_code'] !== 0)
+            {
+                $this->setVerifyCode($dataJson['error_code']);
+                $this->setMessage('Update Failed');
+                $std->data = $dataJson['message'];
+                $this->setBody($std);
+            }
+            if ($dataJson['error_code'] == 2)
+            {
+                $this->setStatus(JsonResponse::HTTP_CONFLICT);
+            } else if($dataJson['error_code'] == 1) {
+                $this->setStatus(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
         } else {
             $std->data = $dataJson['body'];
-
             $this->setBody($std);
-        }
-        if ($dataJson['error_code'] == 2) {
-            $this->setStatus(JsonResponse::HTTP_CONFLICT);
-        } else if($dataJson['error_code'] == 1){
-            $this->setStatus(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

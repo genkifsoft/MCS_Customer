@@ -9,7 +9,13 @@ use Illuminate\Http\JsonResponse;
 class CustomerRepository extends CustomerEloquentRepository
 {
     const USER_ACTIVED = 1;
+    const PERMISSION_ADMIN = 2;
+    const PERMISSION_USER = 1;
+
     public $data = [];
+
+    use \MicroService\Src\Traits\JWT;
+    use \MicroService\Src\Traits\Singleton;
 
     public function createRepository($params_request)
     {
@@ -51,6 +57,7 @@ class CustomerRepository extends CustomerEloquentRepository
         try {
             $userId = JWTAuth::user()->id;
             $this->data['body'] = $this->find($userId);
+            $this->data['body']->roles = $this->data['body']->roles == self::PERMISSION_USER ? "user" : ["user", "admin"];
         } catch(\Exception $e) {
             unset($this->data['status']);
             $this->data['error'] = "Unauthorized";
@@ -64,12 +71,10 @@ class CustomerRepository extends CustomerEloquentRepository
         $params_request['password'] = urldecode($params_request['password']);
         $this->data['status'] = "success";     
         $option = array_only($params_request, ['email', 'password']);
-        
         if (!$token = JWTAuth::attempt($option))
         {
             unset($this->data['status']);
             $this->data['error'] = "login_error";
-
             $this->data['error_code'] = JsonResponse::HTTP_NOT_FOUND;
             $this->data['message'] =  'Nguời dùng không tìm thấy';
         } else {
@@ -147,6 +152,34 @@ class CustomerRepository extends CustomerEloquentRepository
             $this->data['message'] =  $e->getMessage();
         }
 
+        return $this;
+    }
+
+    public function changePassword($request)
+    {
+        $newInstance = CustomerRepository::getInstance();
+        $userId = $newInstance::authID();
+        $email = $newInstance::authEmail();
+        $option = [
+            'password' => urldecode($request->input('current_pass')),
+            'email' => $email,
+        ];
+        if (JWTAuth::attempt($option))
+        {
+            $this->data['error_code']  = 2;
+            $this->data['message'] ="Không được đặt giống mật khẩu cũ";
+        } else {
+            try {
+                $option = [
+                    'password' => Hash::make(urldecode($request->input('current_pass'))),
+                ];
+                $this->data['body'] = $this->update($userId, $option, $columns = ['id']);
+            } catch (JWTException $e) {
+                $this->data['error_code']  = 1;
+                $this->data['message'] = "Change password failed";
+            }
+        }
+        
         return $this;
     }
 }

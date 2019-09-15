@@ -77,7 +77,7 @@ abstract class AbstractEloquentRepository implements interfaceRepository
      * @param array $attributes
      * @return bool|mixed
      */
-    public function update($id, array $attributes, $columns = [])
+    public function update($id, array $attributes, $columns = "*")
     {
         $result = $this->_model->find($id, $columns);
         if ($result) {
