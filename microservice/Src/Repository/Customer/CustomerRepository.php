@@ -17,15 +17,15 @@ class CustomerRepository extends CustomerEloquentRepository
     use \MicroService\Src\Traits\JWT;
     use \MicroService\Src\Traits\Singleton;
 
-    public function createRepository($params_request)
+    public function createRepository($request)
     {
         $this->data['status'] = "success";
         $data = [
             'id'            => customerId($this->count()),
-            'email'         => $params_request['email'],
-            'first_name'    => $params_request['first_name'],
-            'last_name'     => $params_request['last_name'],
-            'password'      => Hash::make($params_request['password']),
+            'email'         => $request->input('email'),
+            'first_name'    => $request->input('first_name'),
+            'last_name'     => $request->input('last_name'),
+            'password'      => Hash::make($request->input('password')),
             'status'        => self::USER_ACTIVED,
         ];
         try {
@@ -40,10 +40,10 @@ class CustomerRepository extends CustomerEloquentRepository
         return $this;
     }
 
-    public function getAllRepository($params_request)
+    public function getAllRepository($request)
     {
-        $offset = $params_request['offset'];
-        $limit = $params_request['limit'];
+        $offset = $request->input('offset');
+        $limit = $request->input('limit');
         $columns = ['id', 'email', 'first_name', 'last_name'];
         
         $this->data = $this->getAll($columns, $offset, $limit);
@@ -51,7 +51,7 @@ class CustomerRepository extends CustomerEloquentRepository
         return $this;
     }
 
-    public function detailCustomerRepository($params_request)
+    public function detailCustomerRepository($request)
     {
         $this->data['status'] = "success";
         try {
@@ -66,11 +66,13 @@ class CustomerRepository extends CustomerEloquentRepository
         return $this;
     }
 
-    public function loginRepository($params_request)
+    public function loginRepository($request)
     {   
-        $params_request['password'] = urldecode($params_request['password']);
+        $option = [
+            'email' => $request->get('email'),
+            'password' => urldecode($request->get('password')),
+        ];
         $this->data['status'] = "success";     
-        $option = array_only($params_request, ['email', 'password']);
         if (!$token = JWTAuth::attempt($option))
         {
             unset($this->data['status']);
@@ -101,12 +103,7 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function updateRepository($request)
     {
-        $data = [
-            'last_name'    => $request->get('last_name'),
-            'first_name'   => $request->get('first_name'),
-            'address'      => $request->get('address'),
-            'phone'        => $request->get('phone'),
-        ];
+        $data = $request->only('last_name', 'first_name', 'address', 'phone');
         $columns = ['id', 'last_name', 'first_name', 'address', 'email', 'phone'];
         $this->data['error_code'] = 1;
         try {
@@ -125,10 +122,10 @@ class CustomerRepository extends CustomerEloquentRepository
         return $this;
     }
 
-    public function deleteRepository($params_request)
+    public function deleteRepository($request)
     {
         try {
-            $this->data['body'] = (boolean)$this->delete($params_request['id']);
+            $this->data['body'] = (boolean)$this->delete($request->get('id'));
             if ($this->data['body'] === false) {
                 $this->data['body'] = JsonResponse::HTTP_NOT_FOUND;
             }
@@ -140,7 +137,7 @@ class CustomerRepository extends CustomerEloquentRepository
         return $this;
     }
 
-    public function refreshRepository($params_request)
+    public function refreshRepository($request)
     {
         try{
             $this->data['status'] = "success";

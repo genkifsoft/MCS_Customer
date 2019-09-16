@@ -18,7 +18,8 @@ Route::namespace('Api')->group(function () {
     Route::group(['middleware' => 'ApiMicroService', 'prefix' => 'user'], function ($router) {
         Route::post('create-customer', 'CustomerController@createCustomer');
         Route::post('login', 'CustomerController@loginCustomer');
-       
+        Route::post('fogot-password', 'CustomerController@fogotPassword');
+
         Route::group(['middleware' => 'jwt.auth'], function ($router) {
             Route::post('detail', 'CustomerController@detailCustomer');
             Route::post('list', 'CustomerController@getAllCustomer');

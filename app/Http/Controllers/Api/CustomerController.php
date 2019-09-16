@@ -19,13 +19,11 @@ class CustomerController
     public function __construct(CustomerRepository $customerRepository)
     {
         $this->customerRepository = $customerRepository;
-        $this->params_request  = request()->all();
-        unset($this->params_request['params_request']);
     }
 
     public function createCustomer(CreateCustomerRequest $request)
     {
-        $data = $this->customerRepository->createRepository($this->params_request);
+        $data = $this->customerRepository->createRepository($request);
         $create_json = new CreateEntity;
         $create_json->setParamByResponse($data);
         $result = $create_json->toJson();
@@ -35,7 +33,7 @@ class CustomerController
 
     public function getAllCustomer(Request $request)
     {
-        $data = $this->customerRepository->getAllRepository($this->params_request);
+        $data = $this->customerRepository->getAllRepository($request);
         $get_json = new GetEntity($data);
         $result   = $get_json->toJson();
 
@@ -44,7 +42,7 @@ class CustomerController
 
     public function detailCustomer(Request $request)
     {
-        $data = $this->customerRepository->detailCustomerRepository($this->params_request);
+        $data = $this->customerRepository->detailCustomerRepository($request);
         $get_json = new GetEntity($data);
         $result   = $get_json->toJson();
 
@@ -57,7 +55,7 @@ class CustomerController
      */
     public function loginCustomer(LoginCustomerRequest $request)
     {
-        $data = $this->customerRepository->loginRepository($this->params_request);
+        $data = $this->customerRepository->loginRepository($request);
         $create_json = new CreateEntity;
         $create_json->setParamByResponse($data);
         $token = isset($data->data['body']) ? $data->data['body'] : $data->data;
@@ -88,7 +86,7 @@ class CustomerController
 
     public function deleteCustomer(Request $request)
     {
-        $data = $this->customerRepository->deleteRepository($this->params_request);
+        $data = $this->customerRepository->deleteRepository($request);
         $delete_json = new DeleteEntity;
         $delete_json->setParamByResponse($data);
         $result = $delete_json->toJson();
@@ -98,7 +96,7 @@ class CustomerController
 
     public function refreshCustomer(Request $request)
     {
-        $data = $this->customerRepository->refreshRepository($this->params_request);
+        $data = $this->customerRepository->refreshRepository($request);
         $create_json = new CreateEntity;
         $create_json->setParamByResponse($data);
         $token = $data->data['body'];
@@ -109,6 +107,16 @@ class CustomerController
     }
 
     public function changePassword(Request $request)
+    {
+        $data = $this->customerRepository->changePassword($request);
+        $update_json = new UpdateEntity;
+        $update_json->setParamByResponse($data);
+        $result = $update_json->toJson();
+
+        return $result;
+    }
+
+    public function fogotPassword()
     {
         $data = $this->customerRepository->changePassword($request);
         $update_json = new UpdateEntity;
