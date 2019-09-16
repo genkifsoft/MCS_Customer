@@ -33,4 +33,42 @@ class CustomerEloquentRepository extends AbstractEloquentRepository
                     ->where('id', '<>', $userId)
                     ->first();
     }
+
+    protected function findEmail($data)
+    {
+        $result = $this->_model->where('email', $data)->first();
+        
+        return $result;
+    }
+
+     /**
+     * Update
+     * @param $id
+     * @param array $attributes
+     * @return bool|mixed
+     */
+    public function updatePassword($id, array $attributes)
+    {
+        $result = $this->_model->where('id', $id)
+                        ->update($attributes);
+
+        return $result;
+    }
+
+    // processing send mail
+    public function sendMailForgotPassword($dataBody, $request, $user, $newPassword)
+    {
+        $mailTemplate = 'email.forgot_password';
+        $options = [
+            'title' => 'Thay đổi mật khẩu',
+            'to_email' => $request->get('email'),
+            'full_name' => $user->last_name .' '. $user->first_name,
+            'new_password' => $newPassword,
+        ];
+        // process send mail
+        mailer($mailTemplate, $options, function ($message) use ($options) {
+            $message->subject('Thay đổi mật khẩu');
+            $message->to($options['to_email']);
+        }, config('queue.priority.high'));
+    }
 }

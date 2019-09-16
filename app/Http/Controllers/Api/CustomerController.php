@@ -116,9 +116,9 @@ class CustomerController
         return $result;
     }
 
-    public function fogotPassword()
+    public function fogotPassword(Request $request)
     {
-        $data = $this->customerRepository->changePassword($request);
+        $data = $this->customerRepository->fogotPassword($request);
         $update_json = new UpdateEntity;
         $update_json->setParamByResponse($data);
         $result = $update_json->toJson();

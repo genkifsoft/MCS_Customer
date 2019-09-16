@@ -133,4 +133,7 @@ return [
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
 
+    'should_queue' => env('MAIL_SHOULD_QUEUE', false),
+    
+    'pretend'      => env('MAIL_PRETEND', true),
 ];

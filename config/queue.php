@@ -83,5 +83,10 @@ return [
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
+    
+    'priority' => [
+        'low'  => 1,
+        'high' => 0
+    ]
 
 ];
