@@ -69,7 +69,7 @@ class Handler extends ExceptionHandler
                 $handerError->setMessage('TOKEN_BLACKLISTED');
                 return $handerError->toJson();
             } else {
-                $handerError->setMessage('AUTHORIZATION_TOKEN_NOT_FOUND');
+                $handerError->setMessage('TOKEN_NOT_FOUND');
                 $handerError->setStatus(404);
                 return $handerError->toJson();
             }
