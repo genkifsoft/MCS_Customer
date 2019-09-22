@@ -26,7 +26,7 @@ class CreateCustomerRequest extends AbstractApiRequest
         return [
             'email'                   => 'required|max:80|min:8',
             'password'                => 'required|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/|max:64|min:8|confirmed',
-            'password_confirmation'   => 'required ',
+            'password_confirmation'   => 'required',
         ];
     }
 

@@ -161,19 +161,26 @@ class CustomerRepository extends CustomerEloquentRepository
             'password' => urldecode($request->input('current_pass')),
             'email' => $email,
         ];
-        if (JWTAuth::attempt($option))
+        if (!JWTAuth::attempt($option))
         {
-            $this->data['error_code']  = 2;
-            $this->data['message'] ="Không được đặt giống mật khẩu cũ";
+            $this->data['error_code']  = 1;
+            $this->data['message'] ="Mật khẩu hiện tại không đúng";
         } else {
-            try {
-                $option = [
-                    'password' => Hash::make(urldecode($request->input('current_pass'))),
-                ];
-                $this->data['body'] = $this->update($userId, $option, $columns = ['id']);
-            } catch (JWTException $e) {
-                $this->data['error_code']  = 1;
-                $this->data['message'] = "Change password failed";
+            $option['password'] = urldecode($request->input('password'));
+            if (JWTAuth::attempt($option))
+            {
+                $this->data['error_code']  = 2;
+                $this->data['message'] ="Mật khẩu mới không được đặt giống mật khẩu cũ";
+            } else {
+                try {
+                    $option = [
+                        'password' => Hash::make(urldecode($request->input('password'))),
+                    ];
+                    $this->data['body'] = $this->update($userId, $option, $columns = ['id']);
+                } catch (JWTException $e) {
+                    $this->data['error_code']  = 1;
+                    $this->data['message'] = "Change password failed";
+                }
             }
         }
         

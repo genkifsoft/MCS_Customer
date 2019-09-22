@@ -10,6 +10,7 @@ use MicroService\Src\Entity\Json\UpdateEntity;
 use MicroService\Src\Repository\Customer\CustomerRepository;
 use App\Http\Requests\Customer\LoginCustomerRequest;
 use App\Http\Requests\Customer\CreateCustomerRequest;
+use App\Http\Requests\Customer\UpdatePasswordRequest;
 
 class CustomerController
 {
@@ -106,7 +107,7 @@ class CustomerController
         return $result;
     }
 
-    public function changePassword(Request $request)
+    public function changePassword(UpdatePasswordRequest $request)
     {
         $data = $this->customerRepository->changePassword($request);
         $update_json = new UpdateEntity;
