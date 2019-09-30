@@ -92,6 +92,7 @@ if (!function_exists('sql_wrap')) {
 }
 
 if (!function_exists('sql_format')) {
+    
     /**
      * This function is used to beautify SQL query
      *

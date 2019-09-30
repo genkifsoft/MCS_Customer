@@ -34,6 +34,12 @@ return [
     */
 
     'channels' => [
+        'database'    => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/db_requests.log'),
+            'level'  => 'debug',
+            'days'   => 3,
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['daily'],
