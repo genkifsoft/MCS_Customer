@@ -45,7 +45,6 @@ class CustomerRepository extends CustomerEloquentRepository
         $offset = $request->input('offset');
         $limit = $request->input('limit');
         $columns = ['id', 'email', 'first_name', 'last_name'];
-        
         $this->data = $this->getAll($columns, $offset, $limit);
 
         return $this;
@@ -129,7 +128,7 @@ class CustomerRepository extends CustomerEloquentRepository
             if ($this->data['body'] === false) {
                 $this->data['body'] = JsonResponse::HTTP_NOT_FOUND;
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->data['error_code'] = 1;
             $this->data['message'] =  $e->getMessage();
         }
@@ -139,7 +138,7 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function refreshRepository($request)
     {
-        try{
+        try {
             $this->data['status'] = "success";
             $this->data['body'] = JWTAuth::refresh(JWTAuth::getToken());
         } catch(\JWTException $e) {
@@ -201,7 +200,7 @@ class CustomerRepository extends CustomerEloquentRepository
             ];
             try {
                 $this->data['body'] = $this->updatePassword($user->id, $option);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $this->data['error_code']  = 1;
                 $this->data['message'] = "Update pass failed";
             }

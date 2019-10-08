@@ -71,6 +71,20 @@ class Customer extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'user' => [
+                'id'              => $this->id,
+                'first_name'      => $this->first_name,
+                'last_name'       => $this->last_name,
+                'email'           => $this->email,
+                'roles'           => $this->roles,
+                'address'         => $this->address,
+                'phone'           => $this->phone,
+                'photo_id'        => $this->photo_id,
+                'status'          => $this->status,
+                'create_date'     => $this->create_date,
+                'alter_date'      => $this->alter_date,
+            ] ,
+        ];
     }
 }
