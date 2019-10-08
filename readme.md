@@ -13,5 +13,3 @@ KEY_CZT = PLVPRtaDOnYFeq3xbe5KpcKwlDJviEFm
 
 MAIL_SHOULD_QUEUE              = false
 MAIL_PRETEND                   = false
-
-{{mcs_media}}api/user/add-photo-avatar?params_request={"czt":"PLVPRtaDOnYFeq3xbe5KpcKwlDJviEFm", "photo_author_id":"123", "id":"1"}
