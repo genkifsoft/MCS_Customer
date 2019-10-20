@@ -20,8 +20,8 @@ class GetEntity extends BasicEntity
             if (isset($data->data['status']))
             {
                 $std->data = $data->data['body'];
+                $std->status = "success";
                 $this->setBody($std);
-                $this->setSuccess($data->data['status']);
             }
         } else {
             $this->setVerifyCode(1);

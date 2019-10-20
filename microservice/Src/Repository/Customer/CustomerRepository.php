@@ -56,7 +56,6 @@ class CustomerRepository extends CustomerEloquentRepository
         try {
             $userId = JWTAuth::user()->id;
             $this->data['body'] = $this->find($userId);
-            $this->data['body']->roles = $this->data['body']->roles == self::PERMISSION_USER ? "user" : ["user", "admin"];
         } catch(\Exception $e) {
             unset($this->data['status']);
             $this->data['error'] = "Unauthorized";
@@ -71,7 +70,7 @@ class CustomerRepository extends CustomerEloquentRepository
             'email' => $request->get('email'),
             'password' => urldecode($request->get('password')),
         ];
-        $this->data['status'] = "success";     
+        $this->data['body']['status'] = "success";     
         if (!$token = JWTAuth::attempt($option))
         {
             unset($this->data['status']);
@@ -139,8 +138,8 @@ class CustomerRepository extends CustomerEloquentRepository
     public function refreshRepository($request)
     {
         try {
-            $this->data['status'] = "success";
-            $this->data['body'] = JWTAuth::refresh(JWTAuth::getToken());
+            $this->data['body']['token'] = JWTAuth::refresh(JWTAuth::getToken());
+            $this->data['body']['status'] = "success";
         } catch(\JWTException $e) {
             unset($this->data['status']);
             $this->data['error'] = "refersh_token_error";
