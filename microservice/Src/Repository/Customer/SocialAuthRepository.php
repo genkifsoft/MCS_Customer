@@ -12,8 +12,6 @@ class SocialAuthRepository
 
     public function callbackSocialRepository($user, $typeSocial)
     {
-        $url      = config('customer.login_faceboook');
-        dd($user);
         // $params   = $request->only('email', 'password');
         $jsonData = CustomerRepository::post($url, $params);
 

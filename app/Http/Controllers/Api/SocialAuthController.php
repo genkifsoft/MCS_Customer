@@ -25,7 +25,6 @@ class SocialAuthController extends Controller
     public function callback($social)
     {
         $dataCallback = Socialite::driver($social)->user();
-        dd($dataCallback);
         $this->_socialAuthRepository->callbackSocialRepository($dataCallback, $social);
     }
 }
