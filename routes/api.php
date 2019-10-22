@@ -31,3 +31,6 @@ Route::namespace('Api')->group(function () {
         });
     });
 });
+
+Route::get('/auth/redirect/{social}', 'SocialAuthController@redirect');
+Route::get('/auth/callback/{social}', 'SocialAuthController@callback');

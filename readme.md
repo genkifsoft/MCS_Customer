@@ -13,3 +13,8 @@ KEY_CZT = PLVPRtaDOnYFeq3xbe5KpcKwlDJviEFm
 
 MAIL_SHOULD_QUEUE              = false
 MAIL_PRETEND                   = false
+
+FACEBOOK_APP_ID             = 2316114435325529
+FACEBOOK_APP_SECRET         = 74b7fe38a8e7044eee426881fa9aacc4
+FACEBOOK_APP_CALLBACK_URL   = https://mcs-customer.local/auth/callback/facebook
+
