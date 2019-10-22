@@ -12,7 +12,7 @@ class Customer extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $primaryKey = "id";
-    protected $table      = "tbl_user";
+    protected $table      = "tbl_users";
     protected $keyType    = 'string';
     public $incrementing  = false;
     public $timestamps    = false;

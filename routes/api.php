@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::namespace('Api')->group(function () {
+    Route::post('auth/social', 'SocialAuthController@authSocial');
 
     Route::group(['middleware' => 'ApiMicroService', 'prefix' => 'user'], function () {
         Route::post('create-customer', 'CustomerController@createCustomer');

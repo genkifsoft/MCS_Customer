@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Services\SocialAccountService;
+use MicroService\Src\Entity\Json\GetEntity;
 use MicroService\Src\Repository\Customers\SocialAuthRepository;
-use Socialite;
-use Laravel\Socialite\Two\User;
 
-class SocialAuthController extends Controller
+class SocialAuthController
 {
     private $_socialAuthRepository;
 
@@ -17,14 +15,12 @@ class SocialAuthController extends Controller
         $this->_socialAuthRepository = $_socialAuthRepository;
     }
 
-    public function redirect($social)
+    public function authSocial(Request $request)
     {
-        return Socialite::driver($social)->redirect();
-    }
+        $data = $this->_socialAuthRepository->createAuthSocialRepository($request);
+        $get_json = new GetEntity($data);
+        $result   = $get_json->toJson();
 
-    public function callback($social)
-    {
-        $dataCallback = Socialite::driver($social)->user();
-        $this->_socialAuthRepository->callbackSocialRepository($dataCallback, $social);
+        return $result;
     }
 }
