@@ -1,6 +1,9 @@
 #docuemnt database design
 #https://docs.google.com/spreadsheets/d/1HM9-Z1-8Mb72IzycOjTFJZP9mi_45T7egYusV2xBa88/edit#gid=1113983513
 
+php artisan key:generate
+php artisan jwt:secret
+
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306

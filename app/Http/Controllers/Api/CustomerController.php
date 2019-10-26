@@ -59,9 +59,8 @@ class CustomerController
         $data = $this->customerRepository->loginRepository($request);
         $create_json = new CreateEntity;
         $create_json->setParamByResponse($data);
-        $token = isset($data->data['body']) ? $data->data['body'] : $data->data;
 
-        $result = $create_json->toJsonHeader($token);
+        $result = $create_json->toJsonHeader($data->data['token']);
 
         return $result;
     }
@@ -98,11 +97,9 @@ class CustomerController
     public function refreshCustomer(Request $request)
     {
         $data = $this->customerRepository->refreshRepository($request);
-        $create_json = new CreateEntity;
-        $create_json->setParamByResponse($data);
-        $token = $data->data['body'];
-
-        $result = $create_json->toJsonHeader($token);
+        $get_json = new GetEntity($data);
+        $token = $data->data['token'];
+        $result   = $get_json->toJsonHeader($token);
 
         return $result;
     }

@@ -49,7 +49,8 @@
             "MicroService\\": "microservice"
         },
         "files": [
-            "helpers/common.php"
+            "helpers/common.php",
+            "helpers/define.php"
         ]
     },
     "minimum-stability": "dev",

@@ -9,8 +9,6 @@ class CreateEntity extends BasicEntity
     public function __construct()
     {
         parent::__construct();
-        $this->setVerifyCode(0);
-        $this->setMessage('Create Success');
         $this->setStatus(JsonResponse::HTTP_CREATED);
     }
 
@@ -22,24 +20,13 @@ class CreateEntity extends BasicEntity
     public function setParamByResponse($response)
     {
         $dataJson = (array)$response->data;
-        if(isset($dataJson['error_code']) && $dataJson['error_code'] !== 0)
+        
+        if (isset($dataJson['status_response']))
         {
-            $this->setVerifyCode($dataJson['error_code']);
-            $this->setMessage('Create Failed');
-            $this->setStatus(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            $this->setBody($dataJson['message']);
-            if (isset($dataJson['error']))
-            {
-                $this->status = 401;
-                $this->setError($dataJson['error']);
-            }
-        } else {
-            if (isset($dataJson['status']))
-                $this->setSuccess($dataJson['status']);
-
-            $std = new \StdClass;
-            $std->data = $dataJson['body'];
-            $this->setBody($std);
+            $this->setStatus($dataJson['status_response']);
+            $this->setMessageStatus(STATUS_ERROR);
         }
+            
+        $this->setResponse($dataJson);
     }
 }

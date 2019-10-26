@@ -50,34 +50,36 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         $handerError = new BasicEntity();
-        $handerError->setVerifyCode(1);
 
         if ($exception instanceof UnauthorizedHttpException) {
             $preException = $exception->getPrevious();
             $handerError->setStatus($exception->getStatusCode());
             if ($preException instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException)
             {
-                $handerError->setMessage('TOKEN_EXPIRED');
+                $handerError->setMessageStatus('TOKEN_EXPIRED');
+                $handerError->setVerifyCode(STATUS_401);
                 return $handerError->toJson();
             }
             else if ($preException instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException)
             {
-                $handerError->setMessage('TOKEN_INVALID');
+                $handerError->setMessageStatus('TOKEN_INVALID');
+                $handerError->setVerifyCode(STATUS_401);
                 return $handerError->toJson();
             }
             else if ($preException instanceof \Tymon\JWTAuth\Exceptions\TokenBlacklistedException) {
-                $handerError->setMessage('TOKEN_BLACKLISTED');
+                $handerError->setMessageStatus('TOKEN_BLACKLISTED');
+                $handerError->setVerifyCode(STATUS_401);
                 return $handerError->toJson();
             } else {
-                $handerError->setMessage('TOKEN_NOT_FOUND');
-                $handerError->setStatus(404);
+                $handerError->setMessageStatus('TOKEN_NOT_FOUND');
+                $handerError->setVerifyCode(STATUS_401);
                 return $handerError->toJson();
             }
         }
         if ($exception->getMessage() === 'Token not provided')
         {
-            $handerError->setMessage('TOKEN_NOT_PROVIDED');
-            $handerError->setStatus(401);
+            $handerError->setMessageStatus('TOKEN_NOT_PROVIDED');
+            $handerError->setVerifyCode(STATUS_401);
             return $handerError->toJson();
         }
         return parent::render($request, $exception);

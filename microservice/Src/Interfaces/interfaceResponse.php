@@ -4,13 +4,11 @@ namespace MicroService\Src\Interfaces;
 
 interface interfaceResponse
 {
-    function setMessage($message);
-
-    function setVerifyCode($result);
+    function setMessageStatus($message);
 
     function setStatus($status);
 
-    function setBody($body);
+    function setResponse($body);
 
     public function toJson();
 }

@@ -52,13 +52,12 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function detailCustomerRepository($request)
     {
-        $this->data['status'] = "success";
         try {
             $userId = JWTAuth::user()->id;
-            $this->data['body'] = $this->find($userId);
+            $this->data = $this->find($userId);
         } catch(\Exception $e) {
-            unset($this->data['status']);
-            $this->data['error'] = "Unauthorized";
+            $this->data['message'] = $e->getMessage();
+            $this->data['status_response'] = JsonResponse::HTTP_NOT_FOUND;
         }
 
         return $this;
@@ -70,15 +69,12 @@ class CustomerRepository extends CustomerEloquentRepository
             'email' => $request->get('email'),
             'password' => urldecode($request->get('password')),
         ];
-        $this->data['body']['status'] = "success";     
         if (!$token = JWTAuth::attempt($option))
         {
-            unset($this->data['status']);
-            $this->data['error'] = "login_error";
-            $this->data['error_code'] = JsonResponse::HTTP_NOT_FOUND;
+            $this->data['status_response'] = JsonResponse::HTTP_NOT_FOUND;
             $this->data['message'] =  'Nguời dùng không tìm thấy';
         } else {
-            $this->data['body']['token'] = $token;
+            $this->data['token'] = $token;
         }
 
         return $this;
@@ -90,9 +86,9 @@ class CustomerRepository extends CustomerEloquentRepository
 
         try {
             JWTAuth::invalidate($token);
-            $this->data['body'] = "User successfully logged out.";
+            $this->data = "User successfully logged out.";
         } catch (JWTException $e) {
-            $this->data['error_code']  = 1;
+            $this->data['status_response'] = JsonResponse::UNAUTHORIZED;
             $this->data['message'] = "Failed to logout, please try again.";
         }
 
@@ -138,12 +134,9 @@ class CustomerRepository extends CustomerEloquentRepository
     public function refreshRepository($request)
     {
         try {
-            $this->data['body']['token'] = JWTAuth::refresh(JWTAuth::getToken());
-            $this->data['body']['status'] = "success";
+            $this->data['token'] = JWTAuth::refresh(JWTAuth::getToken());
         } catch(\JWTException $e) {
-            unset($this->data['status']);
-            $this->data['error'] = "refersh_token_error";
-            $this->data['error_code'] = 1;
+            $this->data['status_response'] = $e->getStatusCode();
             $this->data['message'] =  $e->getMessage();
         }
 

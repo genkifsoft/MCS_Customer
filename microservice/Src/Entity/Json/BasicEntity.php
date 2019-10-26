@@ -8,54 +8,46 @@ use MicroService\Src\Interfaces\interfaceResponse;
 class BasicEntity implements interfaceResponse
 {
     protected $header;
-    protected $body = [];
+    protected $response = [];
     protected $status = JsonResponse::HTTP_OK;
     public $api_name;
 
     public function __construct()
     {
-        $this->setStatus($this->status);
-        $this->setVerifyCode(0);
-        $this->setMessage(null);
-        $this->setBody([]);
-        
+        $this->setMessageStatus('success');
+        $this->setResponse([]);
+
         if(request()->route())
         {
-            $this->body['api_name'] = request()->route()->getActionMethod();
+            $this->response['api_name'] = request()->route()->getActionMethod();
         } else {
-            $this->body['api_name'] = 'Api not found!';
+            $this->response['api_name'] = 'Api not found!';
         }
     }
 
-    public function setMessage($message)
+    public function setMessageStatus($message)
     {
-        $this->body['header']['message'] = $message;
+        $this->response['message'] = $message;
     }
 
-    public function setVerifyCode($result)
+    public function setVerifyCode($code)
     {
-        $this->body['header']['error_code'] = $result;
+        $this->response['error_code'] = $code;
     }
 
     public function setStatus($status)
     {
         $this->status = $status;
-        $this->body['header']['status_code'] = $status;
     }
 
-    public function setBody($body)
+    public function setResponse($response)
     {
-        $this->body['body'] = $body;
+        $this->response['data'] = $response;
     }
 
-    public function setError($message)
+    public function setMessageSuccess($message)
     {
-        $this->body['error'] = $message;
-    }
-
-    public function setSuccess($message)
-    {
-        $this->body['status'] = $message;
+        $this->response['status'] = $message;
     }
 
     /**
@@ -63,12 +55,12 @@ class BasicEntity implements interfaceResponse
      * @return json
      */
     function toJson(){
-        return response()->json($this->body, $this->status);
+        return response()->json($this->response, $this->status);
     }
 
     function toJsonHeader($token){
-        return response()->json($this->body, $this->status)
+        return response()->json($this->response, $this->status)
                         ->header('Content-Type', 'application/json')
-                        ->header('Authorization', 'Bearer '.$token['token']);
+                        ->header('Authorization', 'Bearer '.$token);
     }
 }
