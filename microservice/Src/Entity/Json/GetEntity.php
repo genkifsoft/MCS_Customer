@@ -16,7 +16,7 @@ class GetEntity extends BasicEntity
         if (isset($data->data['status_response']))
             $this->setStatus($data->data['status_response']);
 
-        if ($this->setResponse(isset($data->data)))
+        if (isset($data->data))
             $this->setResponse($data->data);
     }
 
