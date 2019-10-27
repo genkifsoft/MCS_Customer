@@ -144,23 +144,23 @@ class CustomerRepository extends CustomerEloquentRepository
         ];
         if (!JWTAuth::attempt($option))
         {
-            $this->data['error_code']  = 1;
-            $this->data['message'] ="Mật khẩu hiện tại không đúng";
+            $this->data['status_response']  = JsonResponse::HTTP_UNAUTHORIZED;
+            $this->data['message'] = "Update_Password_401";
         } else {
             $option['password'] = urldecode($request->input('password'));
             if (JWTAuth::attempt($option))
             {
-                $this->data['error_code']  = 2;
-                $this->data['message'] ="Mật khẩu mới không được đặt giống mật khẩu cũ";
+                $this->data['status_response']  = JsonResponse::HTTP_CONFLICT;
+                $this->data['message'] = "Update_Password_409";
             } else {
                 try {
                     $option = [
                         'password' => Hash::make(urldecode($request->input('password'))),
                     ];
-                    $this->data['body'] = $this->update($userId, $option, $columns = ['id']);
+                    $this->data = $this->update(['id' => $userId], $option);
                 } catch (JWTException $e) {
-                    $this->data['error_code']  = 1;
-                    $this->data['message'] = "Change password failed";
+                    $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
+                    $this->data['message'] = $e->getMessage();
                 }
             }
         }
