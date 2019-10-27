@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 class UpdateEntity extends BasicEntity
 {
     const NOT_CHANGE_DATA = 'DATA_NOT_CHANGE';
+    const NOT_FOUND_DATA = 'DATA_NOT_FOUND';
 
     public function __construct()
     {
@@ -28,6 +29,9 @@ class UpdateEntity extends BasicEntity
             $this->setMessageStatus(self::NOT_CHANGE_DATA);
             $dataJson = [];
         } else if ($response->data === 1) {
+            $dataJson = [];
+        } else if ($response->data === null) {
+            $this->setMessageStatus(self::NOT_FOUND_DATA);
             $dataJson = [];
         }
 

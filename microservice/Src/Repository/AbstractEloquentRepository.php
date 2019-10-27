@@ -86,7 +86,7 @@ abstract class AbstractEloquentRepository implements interfaceRepository
                         ->update($attributes);
         }
 
-        return false;
+        return null;
     }
 
     public function pagination($offset = 0, $limit = 10)
