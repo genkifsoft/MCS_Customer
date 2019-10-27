@@ -39,10 +39,8 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function getAllRepository($request)
     {
-        $offset = $request->input('offset');
-        $limit = $request->input('limit');
-        $columns = ['id', 'email', 'first_name', 'last_name'];
-        $this->data = $this->getAll($columns, $offset, $limit);
+        $limit = $request->get('limit', LIMIT_PAGE);
+        $this->data = $this->paginate($limit);
 
         return $this;
     }
@@ -114,7 +112,7 @@ class CustomerRepository extends CustomerEloquentRepository
     public function deleteRepository($request)
     {
         try {
-            $this->data = (boolean)$this->delete($request->get('id'));
+            $this->data = $this->delete($request->get('id'));
         } catch (\Exception $e) {
             $this->data['status_response'] = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
             $this->data['message'] =  $e->getMessage();

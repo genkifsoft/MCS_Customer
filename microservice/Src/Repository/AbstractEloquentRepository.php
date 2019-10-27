@@ -40,13 +40,14 @@ abstract class AbstractEloquentRepository implements interfaceRepository
      * Get All
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getAll($columns = [], $offset = 0, $limit = 10)
+    public function all($columns = array('*'))
     {
-        $this->pagination['total_page'] = (int)ceil($this->count()/$limit);
-        $this->pagination['curent_page'] = (int)round($offset/$limit) + 1;
-        $this->pagination['list'] = $this->pagination($offset, $limit);
+        return $this->_model->all($columns);
+    }
 
-        return $this->pagination;
+    public function paginate($limit = null, $columns = ['*'])
+    {
+        return $this->_model->paginate($limit, $columns);
     }
 
     /**

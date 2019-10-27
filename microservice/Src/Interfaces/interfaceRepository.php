@@ -8,7 +8,7 @@ interface interfaceRepository
      * Get all
      * @return mixed
      */
-    public function getAll();
+    public function all();
 
     /**
      * Get one
