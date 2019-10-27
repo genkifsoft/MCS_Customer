@@ -22,17 +22,13 @@ class UpdateEntity extends BasicEntity
         {
             $this->setStatus($dataJson->status_response);
             $this->setMessageStatus($dataJson->message);
-            $dataJson = [];
         }
         
+        $dataJson = [];
         if ($response->data === 0){
             $this->setMessageStatus(self::NOT_CHANGE_DATA);
-            $dataJson = [];
-        } else if ($response->data === 1) {
-            $dataJson = [];
         } else if ($response->data === null) {
             $this->setMessageStatus(self::NOT_FOUND_DATA);
-            $dataJson = [];
         }
 
         $this->setResponse($dataJson);

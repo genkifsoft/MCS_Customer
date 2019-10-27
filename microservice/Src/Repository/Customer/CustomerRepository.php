@@ -98,7 +98,7 @@ class CustomerRepository extends CustomerEloquentRepository
         try {
             $checkPhoneExist = $this->checkPhoneBeforeUpdate(userId(), $request->get('phone'));
             if ($checkPhoneExist) {
-                $this->data['message'] = 'Số điện thoại đã tồn tại';
+                $this->data['message'] = 'Customer_Exists_451';
                 $this->data['status_response'] =  JsonResponse::HTTP_CONFLICT;
             } else {
                 $this->data = $this->update(['id' => userId()], $data);
@@ -114,12 +114,9 @@ class CustomerRepository extends CustomerEloquentRepository
     public function deleteRepository($request)
     {
         try {
-            $this->data['body'] = (boolean)$this->delete($request->get('id'));
-            if ($this->data['body'] === false) {
-                $this->data['body'] = JsonResponse::HTTP_NOT_FOUND;
-            }
+            $this->data = (boolean)$this->delete($request->get('id'));
         } catch (\Exception $e) {
-            $this->data['error_code'] = 1;
+            $this->data['status_response'] = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
             $this->data['message'] =  $e->getMessage();
         }
 

@@ -6,33 +6,28 @@ use Illuminate\Http\JsonResponse;
 
 class DeleteEntity extends BasicEntity
 {
+    const NOT_FOUND_DATA = 'DATA_NOT_FOUND';
+
     public function __construct()
     {
         parent::__construct();
-        $this->setVerifyCode(0);
-        $this->setMessage('Delete Success');
         $this->setStatus(JsonResponse::HTTP_OK);
     }
 
     public function setParamByResponse($response)
     {
-        $dataJson = (array)$response->data;
-        if(isset($dataJson['error_code']) && $dataJson['error_code'] !== 0)
+        $dataJson = (object)$response->data;
+        if (isset($dataJson->status_response))
         {
-            $this->setVerifyCode($dataJson['error_code']);
-            $this->setMessage('Delete Failed');
-            $this->setStatus(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            $this->setBody($dataJson['message']);
-        } else if ($dataJson['body'] === 404) {
-            $this->setMessage('Delete Failed');
-            $this->setVerifyCode(1);
-            $this->setStatus(JsonResponse::HTTP_NOT_FOUND);
-            $this->setBody(false);
-        } else {
-            $std = new \StdClass;
-            $std->data = $dataJson['body'];
-
-            $this->setBody($std);
+            $this->setStatus($dataJson->status_response);
+            $this->setMessageStatus($dataJson->message);
         }
+        
+        $dataJson = [];
+        if ($response->data === false) {
+            $this->setMessageStatus(self::NOT_FOUND_DATA);
+        }
+
+        $this->setResponse($dataJson);
     }
 }
