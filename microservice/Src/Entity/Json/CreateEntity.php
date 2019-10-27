@@ -19,12 +19,12 @@ class CreateEntity extends BasicEntity
      */
     public function setParamByResponse($response)
     {
-        $dataJson = (array)$response->data;
-        
-        if (isset($dataJson['status_response']))
+        $dataJson = (object)$response->data;
+        if (isset($dataJson->status_response))
         {
-            $this->setStatus($dataJson['status_response']);
-            $this->setMessageStatus(STATUS_ERROR);
+            $this->setStatus($dataJson->status_response);
+            $this->setMessageStatus($dataJson->message);
+            $dataJson = [];
         }
             
         $this->setResponse($dataJson);

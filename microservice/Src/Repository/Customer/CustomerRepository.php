@@ -19,7 +19,6 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function createRepository($request)
     {
-        $this->data['status'] = "success";
         $data = [
             'id'            => customerId($this->count()),
             'email'         => $request->input('email'),
@@ -29,12 +28,10 @@ class CustomerRepository extends CustomerEloquentRepository
             'status'        => self::USER_ACTIVED,
         ];
         try {
-            $this->data['body'] = $this->create($data);
+            $this->data = $this->create($data);
         } catch(\Exception $e) {
-            unset($this->data['status']);
-            $this->data['error'] = "register_validation_error";
-            $this->data['error_code'] = $e->errorInfo[1];
-            $this->data['message'] =  $e->getMessage();
+            $this->data['message'] = $e->getMessage();
+            $this->data['status_response'] =  JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
         }
         
         return $this;
@@ -98,19 +95,17 @@ class CustomerRepository extends CustomerEloquentRepository
     public function updateRepository($request)
     {
         $data = $request->only('last_name', 'first_name', 'address', 'phone');
-        $columns = ['id', 'last_name', 'first_name', 'address', 'email', 'phone'];
-        $this->data['error_code'] = 1;
         try {
             $checkPhoneExist = $this->checkPhoneBeforeUpdate(userId(), $request->get('phone'));
             if ($checkPhoneExist) {
                 $this->data['message'] = 'Số điện thoại đã tồn tại';
-                $this->data['error_code'] = 2;
+                $this->data['status_response'] =  JsonResponse::HTTP_CONFLICT;
             } else {
-                $this->data['error_code'] = 0;
-                $this->data['body'] = $this->update(userId(), $data, $columns);
+                $this->data = $this->update(['id' => userId()], $data);
             }
         } catch(\Exception $e) {
             $this->data['message'] =  $e->getMessage();
+            $this->data['status_response'] =  JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
         }
 
         return $this;
