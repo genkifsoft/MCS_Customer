@@ -6,60 +6,32 @@ use Illuminate\Http\JsonResponse;
 
 class UpdateEntity extends BasicEntity
 {
-    const NOT_CHANGE_DATA = 0;
+    const NOT_CHANGE_DATA = 'DATA_NOT_CHANGE';
 
     public function __construct()
     {
         parent::__construct();
-        $this->setVerifyCode(0);
-        $this->setMessage('Update Success');
         $this->setStatus(JsonResponse::HTTP_OK);
     }
 
     public function setParamByResponse($response)
     {
-        $dataJson = (array)$response->data;
-        $std = new \StdClass;
-        if(isset($dataJson['error_code']))
+        $dataJson = (object)$response->data;
+        if (isset($dataJson->status_response))
         {
-            if ($dataJson['error_code'] != 0)
-            {
-                $this->setVerifyCode($dataJson['error_code']);
-                $this->setMessage('Update Failed');
-                $std->data = $dataJson['message'];
-                $this->setBody($std);
-
-                switch ($dataJson['error_code'])
-                {
-                    case 1:
-                        $this->setStatus(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                    break;
-
-                    case 2:
-                        $this->setStatus(JsonResponse::HTTP_CONFLICT);
-                    break;
-
-                    case 3:
-                        $this->setStatus(JsonResponse::HTTP_NOT_FOUND);
-                    break;
-
-                    default:
-                        # code...
-                    break;
-                }
-            }
-        } else {
-            if ((int)$dataJson['body'] === self::NOT_CHANGE_DATA)
-            {
-                /**
-                 * update not change data
-                 */
-                $this->setStatus(JsonResponse::HTTP_RESET_CONTENT);
-                $std->data = 'Dữ liệu không thay đổi';
-            } else {
-                $std->data = $dataJson['body'];
-                $this->setBody($std);
-            }
+            $this->setStatus($dataJson->status_response);
+            $this->setMessageStatus($dataJson->message);
+            $dataJson = [];
         }
+        
+        if ($response->data === 0)
+        {
+            $this->setMessageStatus(self::NOT_CHANGE_DATA);
+            $dataJson = ['update' => false];
+        } else {
+            $dataJson = ['update' => true];
+        }
+
+        $this->setResponse($dataJson);
     }
 }
