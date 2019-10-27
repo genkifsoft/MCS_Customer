@@ -24,12 +24,11 @@ class UpdateEntity extends BasicEntity
             $dataJson = [];
         }
         
-        if ($response->data === 0)
-        {
+        if ($response->data === 0){
             $this->setMessageStatus(self::NOT_CHANGE_DATA);
-            $dataJson = ['update' => false];
-        } else {
-            $dataJson = ['update' => true];
+            $dataJson = [];
+        } else if ($response->data === 1) {
+            $dataJson = [];
         }
 
         $this->setResponse($dataJson);
