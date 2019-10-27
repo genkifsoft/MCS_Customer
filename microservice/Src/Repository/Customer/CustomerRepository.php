@@ -164,30 +164,30 @@ class CustomerRepository extends CustomerEloquentRepository
                 }
             }
         }
-        
+
         return $this;
     }
 
     public function fogotPassword($request)
     {
-        $user = $this->findEmail($request->get('email'));
+        $user = $this->find(['email' => $request->get('email')]);
         if (empty($user))
         {
-            $this->data['message'] = 'Người dùng không tồn tại';
-            $this->data['error_code'] = 3;
+            $this->data['message'] = 'Forgot_Password_404';
+            $this->data['status_response'] = JsonResponse::HTTP_NOT_FOUND;
         } else {
             $newPassword = generatePassword(8);
             $option = [
                 'password' => Hash::make($newPassword),
             ];
             try {
-                $this->data['body'] = $this->updatePassword($user->id, $option);
+                $this->data = $this->updatePassword($user->id, $option);
             } catch (\Exception $e) {
-                $this->data['error_code']  = 1;
-                $this->data['message'] = "Update pass failed";
+                $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;;
+                $this->data['message'] = $e->getMessage();
             }
-            if ((boolean)$this->data['body'] == true)
-                $this->sendMailForgotPassword($this->data['body'], $request, $user, $newPassword);
+            if ((boolean)$this->data == true)
+                $this->sendMailForgotPassword($this->data, $request, $user, $newPassword);
         }
 
         return $this;
