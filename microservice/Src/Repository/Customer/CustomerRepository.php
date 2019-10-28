@@ -170,7 +170,7 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function fogotPassword($request)
     {
-        $user = $this->find(['email' => $request->get('email')]);
+        $user = $this->findEmail($request->get('email'));
         if (empty($user))
         {
             $this->data['message'] = 'Forgot_Password_404';
@@ -186,7 +186,8 @@ class CustomerRepository extends CustomerEloquentRepository
                 $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;;
                 $this->data['message'] = $e->getMessage();
             }
-            if ((boolean)$this->data == true)
+            
+            if ((boolean)$this->data === true)
                 $this->sendMailForgotPassword($this->data, $request, $user, $newPassword);
         }
 
