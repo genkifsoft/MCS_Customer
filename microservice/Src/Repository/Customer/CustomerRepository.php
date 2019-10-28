@@ -67,7 +67,7 @@ class CustomerRepository extends CustomerEloquentRepository
         if (!$token = JWTAuth::attempt($option))
         {
             $this->data['status_response'] = JsonResponse::HTTP_NOT_FOUND;
-            $this->data['message'] =  'Nguời dùng không tìm thấy';
+            $this->data['message'] =  'Login_404';
         } else {
             $this->data['token'] = $token;
         }
