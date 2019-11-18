@@ -10,9 +10,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Customer extends Authenticatable implements JWTSubject
 {
 
-    protected $primaryKey = "id";
     protected $table      = "tbl_users";
     protected $keyType    = 'string';
+
     public $incrementing  = false;
     public $timestamps    = false;
     
@@ -102,7 +102,7 @@ class Customer extends Authenticatable implements JWTSubject
 
         // process send mail
         mailer($mailTemplate, $options, function ($message) use ($options) {
-            $message->subject('Thay đổi mật khẩu');
+            $message->subject($options['title']);
             $message->to($options['to_email']);
         }, config('queue.priority.high'));
     }
@@ -127,9 +127,9 @@ class Customer extends Authenticatable implements JWTSubject
         return $query->orderBy('alter_date', 'DESC');
     }
 
-    public function scopeUpdatePassword($query, $data)
+    public function scopeUpdatePassword($query, $attrubite)
     {
-        return $query->update($data);
+        return $query->update($attrubite);
     }
 
     public function scopePhone($query, $phone)

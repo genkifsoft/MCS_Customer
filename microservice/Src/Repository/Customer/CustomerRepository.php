@@ -10,9 +10,9 @@ use MicroService\Src\Repository\AbstractEloquentRepository;
 
 class CustomerRepository extends AbstractEloquentRepository
 {
-    const USER_ACTIVED = 1;
+    const USER_ACTIVED     = 1;
     const PERMISSION_ADMIN = 2;
-    const PERMISSION_USER = 1;
+    const PERMISSION_USER  = 1;
 
     public $data = [];
 
@@ -186,11 +186,10 @@ class CustomerRepository extends AbstractEloquentRepository
             $this->data['message'] = 'Forgot_Password_409';
             $this->data['status_response'] = JsonResponse::HTTP_CONFLICT;
         } else {
+
             $user = (object)$user->toArray()[0];
             $newPassword = generatePassword(8);
-            $option = [
-                'password' => Hash::make($newPassword),
-            ];
+            $option = ['password' => Hash::make($newPassword)];
             try {
                 $this->data = Customer::GetId($user->id)->updatePassword($option);
             } catch (\Exception $e) {
