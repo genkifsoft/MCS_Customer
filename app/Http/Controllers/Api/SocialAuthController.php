@@ -17,7 +17,7 @@ class SocialAuthController
 
     public function authSocial(Request $request)
     {
-        $data = $this->_socialAuthRepository->createAuthSocialRepository($request);
+        $data     = $this->_socialAuthRepository->createAuthSocialRepository($request);
         $get_json = new GetEntity($data);
         $result   = $get_json->toJson();
 

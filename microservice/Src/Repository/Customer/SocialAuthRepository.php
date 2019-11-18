@@ -12,6 +12,8 @@ use App\Models\Customer;
 
 class SocialAuthRepository
 {
+    const ACTIVE_CUSTOMER = 1;
+
     public function createAuthSocialRepository($request)
     {
         $model = new User;
@@ -52,6 +54,7 @@ class SocialAuthRepository
                     'id' => customerId(Customer::count()),
                     'email' => $email,
                     'name' => $providerUser->getName(),
+                    'status' => self::ACTIVE_CUSTOMER,
                     'password' => Hash::make($providerUser->getId()),
                 ]);
             }
