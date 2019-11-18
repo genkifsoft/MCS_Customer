@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
 
 class SocialAccount extends Model
 {
-    protected $primaryKey = "id";
     protected $table      = "tbl_social_accounts";
     public $incrementing  = false;
     public $timestamps    = false;
@@ -17,7 +17,6 @@ class SocialAccount extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
         'provider_user_id',
         'provider',
         'url',
@@ -29,6 +28,6 @@ class SocialAccount extends Model
 
     public function customer()
     {
-        return $this->belongsTo('App\Models\Customer','id', 'id');
+        return $this->belongsTo(Customer::class,'id', 'id');
     }
 }

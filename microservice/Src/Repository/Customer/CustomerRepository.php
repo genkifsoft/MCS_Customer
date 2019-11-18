@@ -91,10 +91,10 @@ class CustomerRepository extends AbstractEloquentRepository
 
         try {
             JWTAuth::invalidate($token);
-            $this->data = "User successfully logged out.";
+            $this->data = "Logout_Success_002";
         } catch (JWTException $e) {
             $this->data['status_response'] = JsonResponse::UNAUTHORIZED;
-            $this->data['message'] = "Failed to logout, please try again.";
+            $this->data['message'] = "Logout_Failed_001";
         }
 
         return $this;

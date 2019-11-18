@@ -10,6 +10,7 @@ use MicroService\Src\Entity\Json\UpdateEntity;
 use App\Http\Requests\Customer\LoginCustomerRequest;
 use App\Http\Requests\Customer\CreateCustomerRequest;
 use App\Http\Requests\Customer\UpdatePasswordRequest;
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use MicroService\Src\Repository\Customer\CustomerRepository;
 
 class CustomerController
@@ -74,7 +75,7 @@ class CustomerController
         return $result;
     }
 
-    public function updateCustomer(Request $request)
+    public function updateCustomer(UpdateCustomerRequest $request)
     {
         $data        = $this->customerRepository->updateRepository($request);
         $update_json = new UpdateEntity;
