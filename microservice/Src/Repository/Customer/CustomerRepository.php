@@ -136,12 +136,9 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function changePassword($request)
     {
-        $newInstance = CustomerRepository::getInstance();
-        $userId = $newInstance::authID();
-        $email = $newInstance::authEmail();
         $option = [
             'password' => urldecode($request->input('current_pass')),
-            'email' => $email,
+            'email' => JWTAuth::user()->email,
         ];
         if (!JWTAuth::attempt($option))
         {
@@ -158,7 +155,7 @@ class CustomerRepository extends CustomerEloquentRepository
                     $option = [
                         'password' => Hash::make(urldecode($request->input('password'))),
                     ];
-                    $this->data = $this->update(['id' => $userId], $option);
+                    $this->data = Customer::GetId(JWTAuth::user()->id)->update($option);
                 } catch (JWTException $e) {
                     $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
                     $this->data['message'] = $e->getMessage();
