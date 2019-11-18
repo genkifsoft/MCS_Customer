@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Customer extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
 
     protected $primaryKey = "id";
     protected $table      = "tbl_users";
@@ -17,6 +16,8 @@ class Customer extends Authenticatable implements JWTSubject
     public $incrementing  = false;
     public $timestamps    = false;
     
+    const ACTIVE_CUSTOMER = 1;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -86,5 +87,30 @@ class Customer extends Authenticatable implements JWTSubject
                 'alter_date'      => $this->alter_date,
             ] ,
         ];
+    }
+
+    public function scopeGetId($query, $id)
+    {
+        return $query->where('id', $id);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::ACTIVE_CUSTOMER);
+    }
+
+    public function scopeFindEmail($query, $email)
+    {
+        return $query->where('email', $email);
+    }
+
+    public function scopeSortUpdate($query)
+    {
+        return $query->orderBy('alter_date', 'DESC');
+    }
+
+    public function scopeupdatePassword($query, $data)
+    {
+        return $query->update($data);
     }
 }

@@ -5,6 +5,7 @@ namespace MicroService\Src\Repository\Customer;
 use Hash;
 use JWTAuth;
 use Illuminate\Http\JsonResponse;
+use App\Models\Customer;
 
 class CustomerRepository extends CustomerEloquentRepository
 {
@@ -170,18 +171,21 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function fogotPassword($request)
     {
-        $user = $this->findEmail($request->get('email'));
-        if (empty($user))
+        $user = Customer::findEmail($request->get('email'))->active()->count();
+        if ($user == 0)
         {
             $this->data['message'] = 'Forgot_Password_404';
             $this->data['status_response'] = JsonResponse::HTTP_NOT_FOUND;
+        } else if($user > 1) {
+            $this->data['message'] = 'Forgot_Password_409';
+            $this->data['status_response'] = JsonResponse::HTTP_CONFLICT;
         } else {
             $newPassword = generatePassword(8);
             $option = [
                 'password' => Hash::make($newPassword),
             ];
             try {
-                $this->data = $this->updatePassword($user->id, $option);
+                $this->data = Customer::GetId($user->id)->updatePassword($option);
             } catch (\Exception $e) {
                 $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;;
                 $this->data['message'] = $e->getMessage();
