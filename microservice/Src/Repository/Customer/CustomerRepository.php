@@ -4,10 +4,11 @@ namespace MicroService\Src\Repository\Customer;
 
 use Hash;
 use JWTAuth;
-use Illuminate\Http\JsonResponse;
 use App\Models\Customer;
+use Illuminate\Http\JsonResponse;
+use MicroService\Src\Repository\AbstractEloquentRepository;
 
-class CustomerRepository extends CustomerEloquentRepository
+class CustomerRepository extends AbstractEloquentRepository
 {
     const USER_ACTIVED = 1;
     const PERMISSION_ADMIN = 2;
@@ -15,8 +16,16 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public $data = [];
 
-    use \MicroService\Src\Traits\JWT;
     use \MicroService\Src\Traits\Singleton;
+
+     /**
+     * get model
+     * @return string
+     */
+    public function getModel()
+    {
+        return \App\Models\Customer::class;
+    }
 
     public function createRepository($request)
     {
@@ -95,12 +104,12 @@ class CustomerRepository extends CustomerEloquentRepository
     {
         $data = $request->only('last_name', 'first_name', 'address', 'phone');
         try {
-            $checkPhoneExist = $this->checkPhoneBeforeUpdate(userId(), $request->get('phone'));
-            if ($checkPhoneExist) {
+            $checkPhoneExist = Customer::Phone($request->get('phone'))->differentId(JWTAuth::user()->id)->first();
+            if (empty($checkPhoneExist)) {
                 $this->data['message'] = 'Customer_Exists_451';
                 $this->data['status_response'] =  JsonResponse::HTTP_CONFLICT;
             } else {
-                $this->data = $this->update(['id' => userId()], $data);
+                $this->data = $this->update(['id' => JWTAuth::user()->id], $data);
             }
         } catch(\Exception $e) {
             $this->data['message'] =  $e->getMessage();
@@ -155,7 +164,7 @@ class CustomerRepository extends CustomerEloquentRepository
                     $option = [
                         'password' => Hash::make(urldecode($request->input('password'))),
                     ];
-                    $this->data = Customer::GetId(JWTAuth::user()->id)->update($option);
+                    $this->data = $this->update(['id' => JWTAuth::user()->id], $option);
                 } catch (JWTException $e) {
                     $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
                     $this->data['message'] = $e->getMessage();
@@ -168,15 +177,16 @@ class CustomerRepository extends CustomerEloquentRepository
 
     public function fogotPassword($request)
     {
-        $user = Customer::findEmail($request->get('email'))->active()->count();
-        if ($user == 0)
+        $user = Customer::findEmail($request->get('email'))->active()->sampleForgot()->get();
+        if (count($user->toArray()) == 0)
         {
             $this->data['message'] = 'Forgot_Password_404';
             $this->data['status_response'] = JsonResponse::HTTP_NOT_FOUND;
-        } else if($user > 1) {
+        } else if(count($user->toArray()) > 1) {
             $this->data['message'] = 'Forgot_Password_409';
             $this->data['status_response'] = JsonResponse::HTTP_CONFLICT;
         } else {
+            $user = (object)$user->toArray()[0];
             $newPassword = generatePassword(8);
             $option = [
                 'password' => Hash::make($newPassword),
@@ -187,9 +197,8 @@ class CustomerRepository extends CustomerEloquentRepository
                 $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;;
                 $this->data['message'] = $e->getMessage();
             }
-            
             if ((boolean)$this->data === true)
-                $this->sendMailForgotPassword($this->data, $request, $user, $newPassword);
+                Customer::sendMailForgotPassword($this->data, $request, $user, $newPassword);
         }
 
         return $this;

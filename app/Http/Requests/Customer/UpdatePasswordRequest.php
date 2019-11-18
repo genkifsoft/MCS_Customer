@@ -33,17 +33,17 @@ class UpdatePasswordRequest extends AbstractApiRequest
     public function messages()
     {
         return [
-            'current_pass.required'                    => 'UPDATE_PASSWORD_REQUIRED_428',
-            'current_pass.max'                         => 'UPDATE_PASSWORD_MAX',
-            'current_pass.min'                         => 'UPDATE_PASSWORD_MIN',
-            'password.required'                        => 'UPDATE_NEW_PASSWORD_REQUIRED_428',
-            'password.max'                             => 'UPDATE_NEW_PASSWORD_MAX',
-            'password.min'                             => 'UPDATE_NEW_PASSWORD_MIN',
-            'password.confirmed'                       => 'UPDATE_NEW_PASSWORD_COMFIRMED',
-            'password_confirmation.required'           => 'UPDATE_COMFIRM_PASSWORD_REQUIRED_428',
-            'password_confirmation.max'                => 'UPDATE_COMFIRM_PASSWORD_MAX',
-            'password_confirmation.min'                => 'UPDATE_COMFIRM_PASSWORD_MIN',
-            'password_confirmation.confirmed'          => 'UPDATE_COMFIRM_PASSWORD_COMFIRMED_428',
+            'current_pass.required'                    => 'Update_Cutomer_001',
+            'current_pass.max'                         => 'Update_Cutomer_002',
+            'current_pass.min'                         => 'Update_Cutomer_003',
+            'password.required'                        => 'Update_Cutomer_004',
+            'password.max'                             => 'Update_Cutomer_005',
+            'password.min'                             => 'Update_Cutomer_006',
+            'password.confirmed'                       => 'Update_Cutomer_007',
+            'password_confirmation.required'           => 'Update_Cutomer_008',
+            'password_confirmation.max'                => 'Update_Cutomer_009',
+            'password_confirmation.min'                => 'Update_Cutomer_0010',
+            'password_confirmation.confirmed'          => 'Update_Cutomer_0011',
         ];
     }
 }

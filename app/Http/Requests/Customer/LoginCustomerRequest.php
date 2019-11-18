@@ -32,13 +32,13 @@ class LoginCustomerRequest extends AbstractApiRequest
     public function messages()
     {
         return [
-            'email.max'              => 'Email độ dài quá tối đa 80 ký tự',
-            'email.min'              => 'Email độ dài không được nhỏ hơn 8 ký tự',
-            'email.required'         => 'Email không được để trống',
-            'password.max'           => 'Password không được lớn hơn 64 ký tự',
-            'password.min'           => 'Password không được nhỏ hơn 8 ký tự',
-            'password.required'      => 'Password không được để trống',
-            'password.regex'         => 'Mật khẩu phải bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt',
+            'email.max'              => 'Login_Customer_001',
+            'email.min'              => 'Login_Customer_002',
+            'email.required'         => 'Login_Customer_003',
+            'password.max'           => 'Login_Customer_004',
+            'password.min'           => 'Login_Customer_005',
+            'password.required'      => 'Login_Customer_006',
+            'password.regex'         => 'Login_Customer_007',
         ];
     }
 }
