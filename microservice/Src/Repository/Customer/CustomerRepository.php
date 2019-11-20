@@ -105,7 +105,7 @@ class CustomerRepository extends AbstractEloquentRepository
         $data = $request->only('last_name', 'first_name', 'address', 'phone');
         try {
             $checkPhoneExist = Customer::Phone($request->get('phone'))->differentId(JWTAuth::user()->id)->first();
-            if (empty($checkPhoneExist)) {
+            if (!empty($checkPhoneExist)) {
                 $this->data['message'] = 'Customer_Exists_451';
                 $this->data['status_response'] =  JsonResponse::HTTP_CONFLICT;
             } else {
@@ -161,9 +161,8 @@ class CustomerRepository extends AbstractEloquentRepository
                 $this->data['message'] = "Update_Password_409";
             } else {
                 try {
-                    $option = [
-                        'password' => Hash::make(urldecode($request->input('password'))),
-                    ];
+
+                    $option = ['password' => Hash::make(urldecode($request->input('password')))];
                     $this->data = $this->update(['id' => JWTAuth::user()->id], $option);
                 } catch (JWTException $e) {
                     $this->data['status_response']  = JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;

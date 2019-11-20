@@ -28,6 +28,6 @@ class SocialAccount extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class,'id', 'id');
+        return $this->belongsTo(Customer::class, 'id', 'id');
     }
 }
