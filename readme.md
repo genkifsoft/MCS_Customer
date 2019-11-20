@@ -12,8 +12,6 @@ DB_USERNAME=root
 DB_PASSWORD=
 
 
-KEY_CZT = PLVPRtaDOnYFeq3xbe5KpcKwlDJviEFm
-
 MAIL_SHOULD_QUEUE              = false
 MAIL_PRETEND                   = false
 
