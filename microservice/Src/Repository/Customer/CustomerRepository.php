@@ -39,9 +39,9 @@ class CustomerRepository extends AbstractEloquentRepository
         ];
         try {
             $this->data = $this->create($data);
-            $this->data['message'] = 'Tạo ngừoi dùng thành công';
         } catch(\Exception $e) {
             $this->data['message'] = $e->getMessage();
+            $this->data['status_response'] =  JsonResponse::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS;
         }
         
         return $this;
@@ -62,6 +62,7 @@ class CustomerRepository extends AbstractEloquentRepository
             $this->data = $this->find($userId);
         } catch(\Exception $e) {
             $this->data['message'] = $e->getMessage();
+            $this->data['status_response'] = JsonResponse::HTTP_NOT_FOUND;
         }
 
         return $this;
