@@ -196,7 +196,21 @@ class CustomerRepository extends AbstractEloquentRepository
                 $this->data['message'] = $e->getMessage();
             }
             if ((boolean)$this->data === true)
-                Customer::sendMailForgotPassword($this->data, $request, $user, $newPassword);
+            {
+                $mailTemplate = 'email.forgot_password';
+                $options = [
+                    'title' => $request->get('title'),
+                    'to_email' => $request->get('email'),
+                    'full_name' => $user->last_name .' '. $user->first_name,
+                    'new_password' => $newPassword,
+                ];
+
+                // process send mail
+                mailer($mailTemplate, $options, function ($message) use ($options) {
+                    $message->subject($options['title']);
+                    $message->to($options['to_email']);
+                }, config('queue.priority.high'));
+            }
         }
 
         return $this;

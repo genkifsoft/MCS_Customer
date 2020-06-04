@@ -89,24 +89,6 @@ class Customer extends Authenticatable implements JWTSubject
         ];
     }
 
-    // processing send mail
-    public function scopeSendMailForgotPassword($query, $dataBody, $request, $user, $newPassword)
-    {
-        $mailTemplate = 'email.forgot_password';
-        $options = [
-            'title' => $request->get('title'),
-            'to_email' => $request->get('email'),
-            'full_name' => $user->last_name .' '. $user->first_name,
-            'new_password' => $newPassword,
-        ];
-
-        // process send mail
-        mailer($mailTemplate, $options, function ($message) use ($options) {
-            $message->subject($options['title']);
-            $message->to($options['to_email']);
-        }, config('queue.priority.high'));
-    }
-
     public function scopeGetId($query, $id)
     {
         return $query->where('id', $id);
